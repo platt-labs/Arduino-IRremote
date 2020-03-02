@@ -13,6 +13,9 @@
 // JVC and Panasonic protocol added by Kristian Lauszus (Thanks to zenwheel and other people at the original blog post)
 // LG added by Darryl Smith (based on the JVC protocol)
 // Whynter A/C ARC-110WD added by Francesco Meschia
+//
+// Modified March 2020 by Geoffrey K. Adams to move protocol enable/disable
+// to client code
 //******************************************************************************
 
 #ifndef IRremote_h
@@ -26,58 +29,134 @@
 //------------------------------------------------------------------------------
 // Supported IR protocols
 // Each protocol you include costs memory and, during decode, costs time
-// Disable (set to 0) all the protocols you do not need/want!
+// All protocols are disabled by default. To enable a protocol for your code,
+// use a #define directive for the protocol above the #include directive for
+// the library. For example, to enable both sending and decoding NEC, in your
+// sketch code include the following:
 //
-#define DECODE_RC5           1
-#define SEND_RC5             1
+// #define SEND_NEC 1
+// #define DECODE_NEC 1
+// #include <IRremote.h>
+// /* The rest of your code goes here */
 
-#define DECODE_RC6           1
-#define SEND_RC6             1
+#ifndef DECODE_RC5
+#define DECODE_RC5           0
+#endif
+#ifndef SEND_RC5
+#define SEND_RC5             0
+#endif
 
-#define DECODE_NEC           1
-#define SEND_NEC             1
+#ifndef DECODE_RC6
+#define DECODE_RC6           0
+#endif
+#ifndef SEND_RC6
+#define SEND_RC6             0
+#endif
 
-#define DECODE_SONY          1
-#define SEND_SONY            1
+#ifndef DECODE_NEC
+#define DECODE_NEC           0
+#endif
+#ifndef SEND_NEC
+#define SEND_NEC             0
+#endif
 
-#define DECODE_PANASONIC     1
-#define SEND_PANASONIC       1
+#ifndef DECODE_SONY
+#define DECODE_SONY          0
+#endif
+#ifndef SEND_SONY
+#define SEND_SONY            0
+#endif
 
-#define DECODE_JVC           1
-#define SEND_JVC             1
+#ifndef DECODE_PANASONIC
+#define DECODE_PANASONIC     0
+#endif
+#ifndef SEND_PANASONIC
+#define SEND_PANASONIC       0
+#endif
 
-#define DECODE_SAMSUNG       1
-#define SEND_SAMSUNG         1
+#ifndef DECODE_JVC
+#define DECODE_JVC           0
+#endif
+#ifndef SEND_JVC
+#define SEND_JVC             0
+#endif
 
-#define DECODE_WHYNTER       1
-#define SEND_WHYNTER         1
+#ifndef DECODE_SAMSUNG
+#define DECODE_SAMSUNG       0
+#endif
+#ifndef SEND_SAMSUNG
+#define SEND_SAMSUNG         0
+#endif
 
-#define DECODE_AIWA_RC_T501  1
-#define SEND_AIWA_RC_T501    1
+#ifndef DECODE_WHYNTER
+#define DECODE_WHYNTER       0
+#endif
+#ifndef SEND_WHYNTER
+#define SEND_WHYNTER         0
+#endif
 
-#define DECODE_LG            1
-#define SEND_LG              1
+#ifndef DECODE_AIWA_RC_T501
+#define DECODE_AIWA_RC_T501  0
+#endif
+#ifndef SEND_AIWA_RC_T501
+#define SEND_AIWA_RC_T501    0
+#endif
 
-#define DECODE_SANYO         1
+#ifndef DECODE_LG
+#define DECODE_LG            0
+#endif
+#ifndef SEND_LG
+#define SEND_LG              0
+#endif
+
+#ifndef DECODE_SANYO
+#define DECODE_SANYO         0
+#endif
+#if 1 // Protocol not written, ignore
 #define SEND_SANYO           0 // NOT WRITTEN
+#endif
 
-#define DECODE_MITSUBISHI    1
+#ifndef DECODE_MITSUBISHI
+#define DECODE_MITSUBISHI    0
+#endif
+#if 1
 #define SEND_MITSUBISHI      0 // NOT WRITTEN
+#endif
 
+#if 1
 #define DECODE_DISH          0 // NOT WRITTEN
-#define SEND_DISH            1
+#endif
+#ifndef SEND_DISH
+#define SEND_DISH            0
+#endif
 
+#if 1
 #define DECODE_SHARP         0 // NOT WRITTEN
-#define SEND_SHARP           1
+#endif
+#ifndef SEND_SHARP
+#define SEND_SHARP           0
+#endif
 
-#define DECODE_DENON         1
-#define SEND_DENON           1
+#ifndef DECODE_DENON
+#define DECODE_DENON         0
+#endif
+#ifndef SEND_DENON
+#define SEND_DENON           0
+#endif
 
+#if 1
 #define DECODE_PRONTO        0 // This function doe not logically make sense
-#define SEND_PRONTO          1
+#endif
+#ifndef SEND_PRONTO
+#define SEND_PRONTO          0
+#endif
 
+#if 1
 #define DECODE_LEGO_PF       0 // NOT WRITTEN
-#define SEND_LEGO_PF         1
+#endif
+#ifndef SEND_LEGO_PF
+#define SEND_LEGO_PF         0
+#endif
 
 //------------------------------------------------------------------------------
 // When sending a Pronto code we request to send either the "once" code
